@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "New Articles in Food Quality and Preference & Food Chemistry",
+    "date": "2026",
+    "category": "Publication Highlight",
+    "categoryColor": "blue",
+    "description": "Co-authored new studies evaluating personality traits in immersive VR environments, meal context congruency, and wine evolution.",
+    "mediaType": "none",
+    "mediaUrl": ""
+  },
+  {
+    "id": 2,
+    "title": "16th Pangborn Sensory Science Symposium (Philadelphia)",
+    "date": "August 2025",
+    "category": "Conference",
+    "categoryColor": "emerald",
+    "description": "Presented two posters on ambient scents in VR ice cream tasting and cross-cultural Metaverse food interactions in New Zealand.",
+    "mediaType": "none",
+    "mediaUrl": ""
+  },
+  {
+    "id": 3,
+    "title": "PI on $24.8k MURF & $5k REaDI Research Grants",
+    "date": "2024 – 2025",
+    "category": "Grant Awarded",
+    "categoryColor": "purple",
+    "description": "Awarded competitive university grants to pioneer rapid lexicon development for functional beverages and VR consumer experiences.",
+    "mediaType": "none",
+    "mediaUrl": ""
+  }
+]
