@@ -21,21 +21,32 @@ async function loadNews() {
             const card = document.createElement('div');
             card.className = "bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 hover:shadow-md transition";
             
-            // Define tag colors
+            // Define category badge colors
             let colorClasses = "bg-blue-100 text-blue-900";
             if (item.categoryColor === "emerald") colorClasses = "bg-emerald-100 text-emerald-900";
             if (item.categoryColor === "purple") colorClasses = "bg-purple-100 text-purple-900";
 
-            // Optional Media Embed (Images or Videos)
+            // Media Rendering Logic (Images, Video files/URLs, or YouTube Embeds)
             let mediaHtml = '';
             if (item.mediaType === 'image' && item.mediaUrl) {
-                mediaHtml = `<img src="${item.mediaUrl}" class="w-full h-40 object-cover rounded-lg border border-slate-100 mt-2" alt="${item.title}">`;
+                mediaHtml = `<img src="${item.mediaUrl}" class="w-full h-48 object-cover rounded-lg border border-slate-100 mt-2" alt="${item.title}">`;
             } else if (item.mediaType === 'video' && item.mediaUrl) {
                 mediaHtml = `
                     <video controls class="w-full rounded-lg border border-slate-100 mt-2">
-                        <source src="${item.mediaUrl}" type="video/mp4">
-                        Your browser does not support video play.
+                        <source src="${item.mediaUrl}">
+                        Your browser does not support video playback.
                     </video>`;
+            } else if (item.mediaType === 'youtube' && item.mediaUrl) {
+                mediaHtml = `
+                    <div class="relative w-full aspect-video mt-2 rounded-lg overflow-hidden border border-slate-100">
+                        <iframe class="absolute top-0 left-0 w-full h-full" 
+                                src="${item.mediaUrl}" 
+                                title="${item.title}" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>`;
             }
 
             card.innerHTML = `
@@ -61,6 +72,8 @@ async function loadPublications() {
     try {
         const response = await fetch('data/publications.json');
         allPublications = await response.json();
+        
+        // Sort publications by year descending
         allPublications.sort((a, b) => b.year - a.year);
         renderPublications();
     } catch (error) {
@@ -104,6 +117,8 @@ async function loadPosters() {
     try {
         const response = await fetch('data/posters.json');
         const posters = await response.json();
+        
+        // Sort posters by year descending
         posters.sort((a, b) => b.year - a.year);
 
         const container = document.getElementById('posters-container');

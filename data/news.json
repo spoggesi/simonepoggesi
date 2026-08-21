@@ -28,5 +28,15 @@
     "description": "Awarded competitive university grants to pioneer rapid lexicon development for functional beverages and VR consumer experiences.",
     "mediaType": "none",
     "mediaUrl": ""
+  },
+  {
+    "id": 4,
+    "title": "VR Sensory Testing Demonstration",
+    "date": "Demo Example",
+    "category": "Research Demo",
+    "categoryColor": "blue",
+    "description": "Example news item demonstrating a YouTube video embed integrated into the blog feed.",
+    "mediaType": "youtube",
+    "mediaUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
   }
 ]

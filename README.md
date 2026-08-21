@@ -79,8 +79,16 @@ Text-only post:
 ```
 
 Video Post:
+### Adding a Video Entry to data/news.json
 
-Upload an .mp4 video to media/ (e.g., media/vr_demo.mp4), then set:
+YouTube Video:
+
+  ```json
+  "mediaType": "youtube",
+  "mediaUrl": "[https://www.youtube.com/embed/YOUR_VIDEO_ID](https://www.youtube.com/embed/YOUR_VIDEO_ID)"
+```
+
+### Upload an .mp4 video to media/ (e.g., media/vr_demo.mp4), then set:
 
 ```JSON
 "mediaType": "video",
