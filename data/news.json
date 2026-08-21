@@ -29,7 +29,7 @@
     "mediaType": "none",
     "mediaUrl": ""
   },
-  {
+{
     "id": 4,
     "title": "What is the Metaverse in Food Science?",
     "date": "2026",
@@ -37,6 +37,6 @@
     "categoryColor": "blue",
     "description": "An introduction to virtual reality, digital dining environments, and how the Metaverse is transforming consumer sensory research.",
     "mediaType": "youtube",
-    "mediaUrl": "https://youtu.be/5_E8PyAqTus"
-  }
+    "mediaUrl": "https://www.youtube.com/embed/5_E8PyAqTus"
+}
 ]
