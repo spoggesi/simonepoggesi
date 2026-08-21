@@ -21,7 +21,7 @@
   },
   {
     "id": 3,
-    "title": "PI on $24.8k MURF & $5k REaDI Research Grants",
+    "title": "PI on MURF & REaDI Research Grants",
     "date": "2024 – 2025",
     "category": "Grant Awarded",
     "categoryColor": "purple",
@@ -31,12 +31,12 @@
   },
   {
     "id": 4,
-    "title": "VR Sensory Testing Demonstration",
-    "date": "Demo Example",
-    "category": "Research Demo",
+    "title": "What is the Metaverse in Food Science?",
+    "date": "2026",
+    "category": "YouTube / Video",
     "categoryColor": "blue",
-    "description": "Example news item demonstrating a YouTube video embed integrated into the blog feed.",
+    "description": "An introduction to virtual reality, digital dining environments, and how the Metaverse is transforming consumer sensory research.",
     "mediaType": "youtube",
-    "mediaUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+    "mediaUrl": "https://youtu.be/5_E8PyAqTus"
   }
 ]
