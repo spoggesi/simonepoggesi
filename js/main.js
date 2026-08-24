@@ -21,12 +21,10 @@ async function loadNews() {
             const card = document.createElement('div');
             card.className = "bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 hover:shadow-md transition";
             
-            // Define category badge colors
             let colorClasses = "bg-blue-100 text-blue-900";
             if (item.categoryColor === "emerald") colorClasses = "bg-emerald-100 text-emerald-900";
             if (item.categoryColor === "purple") colorClasses = "bg-purple-100 text-purple-900";
 
-            // Media Rendering Logic (Images, Video files/URLs, or YouTube Embeds)
             let mediaHtml = '';
             if (item.mediaType === 'image' && item.mediaUrl) {
                 mediaHtml = `<img src="${item.mediaUrl}" class="w-full h-48 object-cover rounded-lg border border-slate-100 mt-2" alt="${item.title}">`;
@@ -73,7 +71,6 @@ async function loadPublications() {
         const response = await fetch('data/publications.json');
         allPublications = await response.json();
         
-        // Sort publications by year descending
         allPublications.sort((a, b) => b.year - a.year);
         renderPublications();
     } catch (error) {
@@ -91,10 +88,15 @@ function renderPublications() {
     displayList.forEach((pub) => {
         const li = document.createElement('li');
         li.className = "p-4 bg-white rounded-lg border border-slate-200 shadow-sm transition hover:border-blue-300";
+        
+        let doiHtml = pub.doi 
+            ? `<a href="${pub.doi}" target="_blank" class="ml-2 text-xs font-semibold text-blue-900 hover:underline"><i class="fas fa-external-link-alt mr-1"></i>DOI</a>` 
+            : '';
+
         li.innerHTML = `
             <strong>${pub.authors} (${pub.year}).</strong> 
             ${pub.title}. 
-            <em class="text-blue-900">${pub.journal}</em>, ${pub.volume}.
+            <em class="text-blue-900">${pub.journal}</em>, ${pub.volume}.${doiHtml}
         `;
         listContainer.appendChild(li);
     });
@@ -118,7 +120,6 @@ async function loadPosters() {
         const response = await fetch('data/posters.json');
         const posters = await response.json();
         
-        // Sort posters by year descending
         posters.sort((a, b) => b.year - a.year);
 
         const container = document.getElementById('posters-container');
