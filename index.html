@@ -17,6 +17,22 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom styles */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-menu.active {
+            display: block;
+        }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased">
 
@@ -27,6 +43,8 @@
                 <span class="w-8 h-8 rounded-lg bg-[#045922] text-white flex items-center justify-center text-xs font-black tracking-tighter shadow-sm">SP</span>
                 <span>Simone Poggesi</span>
             </a>
+            
+            <!-- Desktop Navigation -->
             <div class="hidden md:flex space-x-6 text-sm font-medium text-slate-600">
                 <a href="#about" class="hover:text-blue-900 transition">About</a>
                 <a href="#news" class="hover:text-blue-900 transition">News & Blog</a>
@@ -34,6 +52,23 @@
                 <a href="#publications" class="hover:text-blue-900 transition">Publications</a>
                 <a href="#posters" class="hover:text-blue-900 transition">Posters</a>
                 <a href="#contact" class="hover:text-blue-900 transition">Contact</a>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-slate-600 focus:outline-none">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div id="mobile-menu" class="mobile-menu md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-blue-900 hover:bg-slate-50">About</a>
+                <a href="#news" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-blue-900 hover:bg-slate-50">News & Blog</a>
+                <a href="#leadership" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-blue-900 hover:bg-slate-50">Grants & Leadership</a>
+                <a href="#publications" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-blue-900 hover:bg-slate-50">Publications</a>
+                <a href="#posters" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-blue-900 hover:bg-slate-50">Posters</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-blue-900 hover:bg-slate-50">Contact</a>
             </div>
         </div>
     </nav>
@@ -53,26 +88,26 @@
             </div>
         </div>
         <div class="flex justify-center">
-            <img src="media/profile.jpg" alt="Simone Poggesi" class="w-52 h-52 rounded-2xl object-cover shadow-xl border-4 border-white">
+            <img src="media/profile.jpg" alt="Simone Poggesi, Ph.D." class="w-52 h-52 rounded-2xl object-cover shadow-xl border-4 border-white" loading="lazy">
         </div>
     </header>
 
     <!-- Interactive Metrics Counter -->
     <div class="max-w-4xl mx-auto px-4 py-6 border-y border-slate-200 grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-12">
-        <div>
-            <div class="text-2xl font-extrabold text-blue-900">15+</div>
+        <div class="counter-item">
+            <div class="text-2xl font-extrabold text-blue-900 counter" data-target="15">0</div>
             <div class="text-xs text-slate-500 font-medium uppercase tracking-wider">Publications</div>
         </div>
-        <div>
-            <div class="text-2xl font-extrabold text-blue-900">238+</div>
+        <div class="counter-item">
+            <div class="text-2xl font-extrabold text-blue-900 counter" data-target="238">0</div>
             <div class="text-xs text-slate-500 font-medium uppercase tracking-wider">Citations</div>
         </div>
-        <div>
-            <div class="text-2xl font-extrabold text-blue-900">h-9</div>
+        <div class="counter-item">
+            <div class="text-2xl font-extrabold text-blue-900 counter" data-target="9">0</div>
             <div class="text-xs text-slate-500 font-medium uppercase tracking-wider">h-Index</div>
         </div>
-        <div>
-            <div class="text-2xl font-extrabold text-blue-900">$29k+</div>
+        <div class="counter-item">
+            <div class="text-2xl font-extrabold text-blue-900 counter" data-target="29000">0</div>
             <div class="text-xs text-slate-500 font-medium uppercase tracking-wider">Grants (NZD)</div>
         </div>
     </div>
@@ -118,7 +153,9 @@
             <span class="text-xs text-slate-500 font-medium">Latest milestones</span>
         </div>
 
-        <div id="news-container" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+        <div id="news-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Content will be dynamically loaded from data/news.json -->
+        </div>
     </section>
 
     <!-- Grants, Teaching & Leadership -->
@@ -162,14 +199,16 @@
     <section id="publications" class="max-w-4xl mx-auto px-4 py-16 space-y-6">
         <div class="flex justify-between items-center border-b-2 border-blue-900 pb-2">
             <h2 class="text-2xl font-bold text-slate-900">Peer-Reviewed Publications</h2>
-            <span class="text-xs font-semibold bg-slate-200 text-slate-700 px-2.5 py-1 rounded-full">15+ Articles | h-index: 9</span>
+            <span id="publication-count" class="text-xs font-semibold bg-slate-200 text-slate-700 px-2.5 py-1 rounded-full">Loading...</span>
         </div>
         
-        <ol id="publications-list" class="space-y-4 text-sm text-slate-700 list-decimal list-inside"></ol>
+        <ol id="publications-list" class="space-y-4 text-sm text-slate-700 list-decimal list-inside">
+            <!-- Publications will be dynamically loaded from data/publications.json -->
+        </ol>
 
         <div class="text-center pt-4">
-            <button onclick="togglePublications()" id="toggle-pubs-btn" class="px-5 py-2.5 bg-slate-800 text-white text-sm font-semibold rounded-lg hover:bg-slate-700 transition">
-                Show All Publications
+            <button id="toggle-pubs-btn" class="px-5 py-2.5 bg-slate-800 text-white text-sm font-semibold rounded-lg hover:bg-slate-700 transition">
+                Loading publications...
             </button>
             <a href="https://scholar.google.com/citations?user=_uT3PBEAAAAJ&hl=en" target="_blank" class="ml-3 px-5 py-2.5 border border-slate-300 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-100 transition">
                 Google Scholar Profile <i class="fas fa-external-link-alt ml-1 text-xs"></i>
@@ -181,7 +220,9 @@
     <section id="posters" class="bg-slate-100 py-16 border-y border-slate-200">
         <div class="max-w-6xl mx-auto px-4 space-y-8">
             <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-blue-900 pb-2 inline-block">Conference Posters</h2>
-            <div id="posters-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            <div id="posters-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Posters will be loaded dynamically from data/posters.json -->
+            </div>
         </div>
     </section>
 
@@ -195,7 +236,7 @@
                 <a href="https://scholar.google.com/citations?user=_uT3PBEAAAAJ&hl=en" target="_blank" class="hover:text-white transition"><i class="fas fa-graduation-cap text-xl"></i></a>
                 <a href="https://orcid.org/0000-0002-7031-3892" target="_blank" class="hover:text-white transition"><i class="fab fa-orcid text-xl"></i></a>
             </div>
-            <p class="text-xs text-slate-600 pt-6">© 2026 Simone Poggesi. Hosted on GitHub Pages.</p>
+            <p class="text-xs text-slate-600 pt-6">© 2024 Simone Poggesi. Hosted on GitHub Pages.</p>
         </div>
     </footer>
 

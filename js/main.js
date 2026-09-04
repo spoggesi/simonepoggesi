@@ -2,10 +2,98 @@ document.addEventListener("DOMContentLoaded", () => {
     loadNews();
     loadPublications();
     loadPosters();
+    
+    // Initialize other functionality
+    initMobileMenu();
+    initSmoothScrolling();
+    initCounters();
 });
 
 let allPublications = [];
 let showingAll = false;
+
+// Initialize mobile menu functionality
+function initMobileMenu() {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if(mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+        });
+    }
+}
+
+// Initialize smooth scrolling for anchor links
+function initSmoothScrolling() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            if(targetId === '#' || targetId === '') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if(targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+                
+                // Close mobile menu if open
+                const mobileMenu = document.getElementById('mobile-menu');
+                if(mobileMenu) {
+                    mobileMenu.classList.remove('active');
+                }
+            }
+        });
+    });
+}
+
+// Counter animation
+function animateCounter(element, target) {
+    let count = 0;
+    const duration = 2000; // ms
+    const increment = target / (duration / 16); // assuming 60fps
+    
+    const timer = setInterval(() => {
+        count += increment;
+        if(count >= target) {
+            element.textContent = target > 1000 ? (target/1000).toFixed(1) + 'k' : target;
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(count) > 1000 ? 
+                (Math.floor(count)/1000).toFixed(1) + 'k' : 
+                Math.floor(count);
+        }
+    }, 16);
+}
+
+// Initialize counters when they come into view
+function initCounters() {
+    const counterItems = document.querySelectorAll('.counter-item');
+    if(counterItems.length > 0) {
+        counterItems.forEach(item => {
+            const counter = item.querySelector('.counter');
+            if(!counter) return;
+            
+            const target = parseInt(counter.getAttribute('data-target'));
+            if(isNaN(target)) return;
+            
+            // Simple animation trigger when element is in viewport
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        animateCounter(counter, target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            observer.observe(item);
+        });
+    }
+}
 
 // 1. Load News & Research Blog
 async function loadNews() {
@@ -102,6 +190,10 @@ function renderPublications() {
     });
 
     const toggleBtn = document.getElementById('toggle-pubs-btn');
+    const statsSpan = document.querySelector('#publications .bg-slate-200');
+    if (statsSpan) {
+        statsSpan.innerText = `${allPublications.length}+ Articles | h-index: 9`;
+    }
     if (toggleBtn) {
         toggleBtn.innerText = showingAll 
             ? 'Show Top 10 Publications' 
@@ -113,6 +205,14 @@ function togglePublications() {
     showingAll = !showingAll;
     renderPublications();
 }
+
+// Add event listener for toggle button after DOM content is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('toggle-pubs-btn');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', togglePublications);
+    }
+});
 
 // 3. Load Posters
 async function loadPosters() {
