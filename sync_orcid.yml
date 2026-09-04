@@ -27,7 +27,7 @@ jobs:
     - name: Run ORCID Sync Script
       env:
         ORCID_ID: ${{ secrets.OR_CID_ID }} # Pass ORCID ID as an environment variable from secrets
-      run: python .github/script/sync_orcid.py
+      run: python sync_orcid.py
 
     - name: Commit and Push Changes
       run: |
