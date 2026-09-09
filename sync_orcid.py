@@ -24,14 +24,26 @@ for group in data.get('group', []):
     work_summary = group['work-summary'][0] # Take the first summary in the group
     title = work_summary.get('title', {}).get('title', {}).get('value', 'No Title')
     journal_title = work_summary.get('journal-title', {}).get('value', '')
-    publication_date = work_summary.get('publication-date')
     
+    # Safely extract publication date parts
+    publication_date = work_summary.get('publication-date')
     date_str = "N/A"
     if publication_date:
-        year = str(publication_date.get('year', {}).get('value', ''))
-        month = str(publication_date.get('month', {}).get('value', '')).zfill(2)
-        day = str(publication_date.get('day', {}).get('value', '')).zfill(2)
-        date_str = f"{year}-{month}-{day}" if year else "N/A"
+        year_val = publication_date.get('year', {}).get('value')
+        month_val = publication_date.get('month', {}).get('value')
+        day_val = publication_date.get('day', {}).get('value')
+
+        year = str(year_val) if year_val else ''
+        month = str(month_val).zfill(2) if month_val else ''
+        day = str(day_val).zfill(2) if day_val else ''
+
+        # Construct the date string based on available parts
+        if year and month and day:
+            date_str = f"{year}-{month}-{day}"
+        elif year and month:
+            date_str = f"{year}-{month}"
+        elif year:
+            date_str = f"{year}"
 
     md_content += f"- **{title}**\n"
     if journal_title:
