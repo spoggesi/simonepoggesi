@@ -6,6 +6,10 @@ on:
     - cron: '0 0 1 * *'
   workflow_dispatch: # Allows manual triggering from the GitHub UI
 
+# Permessi di scrittura per consentire a GitHub Actions di fare il push delle modifiche
+permissions:
+  contents: write
+
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -26,7 +30,7 @@ jobs:
 
     - name: Run ORCID Sync Script
       env:
-        ORCID_ID: ${{ secrets.OR_CID_ID }} # Pass ORCID ID as an environment variable from secrets
+        ORCID_ID: ${{ secrets.ORCID_ID }} # Inserito ORCID_ID senza trattini/underscores extra
       run: python sync_orcid.py
 
     - name: Commit and Push Changes
