@@ -2,41 +2,53 @@
   {
     "id": 1,
     "title": "New Articles in Food Quality and Preference & Food Chemistry",
+    "title_it": "Nuovi Articoli su Food Quality and Preference & Food Chemistry",
     "date": "2026",
     "category": "Publication Highlight",
+    "category_it": "In Evidenza",
     "categoryColor": "blue",
     "description": "Co-authored new studies evaluating personality traits in immersive VR environments, meal context congruency, and wine evolution.",
+    "description_it": "Co-autore di nuovi studi sulla valutazione della personalità in contesti VR immersivi, congruenza del contesto del pasto ed evoluzione dei vini.",
     "mediaType": "none",
     "mediaUrl": ""
   },
   {
     "id": 2,
     "title": "16th Pangborn Sensory Science Symposium (Philadelphia)",
+    "title_it": "16° Simposio di Scienze Sensoriali Pangborn (Philadelphia)",
     "date": "August 2025",
     "category": "Conference",
+    "category_it": "Conferenza",
     "categoryColor": "emerald",
     "description": "Presented two posters on ambient scents in VR ice cream tasting and cross-cultural Metaverse food interactions in New Zealand.",
+    "description_it": "Presentati due poster sull'uso di profumi ambientali nelle degustazioni di gelato in VR e interazioni interculturali sul cibo nel Metaverso.",
     "mediaType": "none",
     "mediaUrl": ""
   },
   {
     "id": 3,
     "title": "PI on MURF & REaDI Research Grants",
+    "title_it": "Principal Investigator su Fondi di Ricerca MURF & REaDI",
     "date": "2024 – 2025",
     "category": "Grant Awarded",
+    "category_it": "Fondi Assegnati",
     "categoryColor": "purple",
     "description": "Awarded competitive university grants to pioneer rapid lexicon development for functional beverages and VR consumer experiences.",
+    "description_it": "Assegnatario di bandi universitari competitivi per sviluppare lessici rapidi per bevande funzionali ed esperienze consumatore in realtà virtuale.",
     "mediaType": "none",
     "mediaUrl": ""
   },
-{
+  {
     "id": 4,
     "title": "What is the Metaverse in Food Science?",
+    "title_it": "Cos'è il Metaverso nelle Scienze Alimentari?",
     "date": "2026",
     "category": "YouTube / Video",
+    "category_it": "Video YouTube",
     "categoryColor": "blue",
     "description": "An introduction to virtual reality, digital dining environments, and how the Metaverse is transforming consumer sensory research.",
+    "description_it": "Introduzione alla realtà virtuale, ambienti di consumo digitali e a come il Metaverso stia trasformando la ricerca sensoriale sui consumatori.",
     "mediaType": "youtube",
     "mediaUrl": "https://www.youtube.com/embed/5_E8PyAqTus"
-}
+  }
 ]

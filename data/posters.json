@@ -5,6 +5,7 @@
     "conference": "16th Pangborn Sensory Science Symposium 2025",
     "location": "Philadelphia, USA",
     "description": "Investigating how congruent vs. incongruent ambient scents in digital immersive rooms alter sensory perception, product liking, and engagement.",
+    "description_it": "Studio sull'impatto di profumi ambientali congruenti o incongruenti in ambienti digitali immersivi su percezione sensoriale, gradimento e coinvolgimento.",
     "pdfPath": "posters/2025_pangborn_icecream.pdf",
     "year": 2025
   },
@@ -14,6 +15,7 @@
     "conference": "16th Pangborn Sensory Science Symposium 2025",
     "location": "Philadelphia, USA",
     "description": "Cross-cultural qualitative evaluation of motivations, opportunities, and barriers surrounding virtual food experiences in Aotearoa-New Zealand.",
+    "description_it": "Valutazione qualitativa interculturale di motivazioni, opportunità e barriere legate alle esperienze gastronomiche virtuali in Nuova Zelanda.",
     "pdfPath": "posters/2025_pangborn_metaverse.pdf",
     "year": 2025
   }

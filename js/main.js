@@ -1,48 +1,114 @@
+let currentLang = 'en';
+let allPublications = [];
+let showingAll = false;
+let allNews = [];
+let allPosters = [];
+
 document.addEventListener("DOMContentLoaded", () => {
-    loadNews();
-    loadPublications();
-    loadPosters();
-    
-    // Initialize other functionality
+    initLanguage();
     initMobileMenu();
     initSmoothScrolling();
     initCounters();
+    
+    loadNews();
+    loadPublications();
+    loadPosters();
 });
 
-let allPublications = [];
-let showingAll = false;
+// Inizializzazione della lingua con rilevamento automatico
+function initLanguage() {
+    const savedLang = localStorage.getItem('site_lang');
+    if (savedLang) {
+        currentLang = savedLang;
+    } else {
+        const browserLang = navigator.language || navigator.userLanguage || 'en';
+        currentLang = browserLang.toLowerCase().startsWith('it') ? 'it' : 'en';
+    }
 
-// Initialize mobile menu functionality
+    applyTranslations(currentLang);
+    updateLanguageButton(currentLang);
+
+    const toggleBtn = document.getElementById('lang-toggle-btn');
+    const toggleBtnMobile = document.getElementById('lang-toggle-mobile');
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', toggleLanguage);
+    }
+    if (toggleBtnMobile) {
+        toggleBtnMobile.addEventListener('click', toggleLanguage);
+    }
+}
+
+function toggleLanguage() {
+    currentLang = currentLang === 'en' ? 'it' : 'en';
+    localStorage.setItem('site_lang', currentLang);
+    applyTranslations(currentLang);
+    updateLanguageButton(currentLang);
+    renderNews();
+    renderPublications();
+    renderPosters();
+}
+
+function updateLanguageButton(lang) {
+    const flagSpan = document.getElementById('lang-flag');
+    const labelSpan = document.getElementById('lang-label');
+    const mobileBtn = document.getElementById('lang-toggle-mobile');
+
+    // Mostra la lingua di destinazione se si clicca
+    if (lang === 'en') {
+        if (flagSpan) flagSpan.textContent = '🇮🇹';
+        if (labelSpan) labelSpan.textContent = 'IT';
+        if (mobileBtn) mobileBtn.textContent = 'IT';
+        document.documentElement.lang = 'en';
+    } else {
+        if (flagSpan) flagSpan.textContent = '🇬🇧';
+        if (labelSpan) labelSpan.textContent = 'EN';
+        if (mobileBtn) mobileBtn.textContent = 'EN';
+        document.documentElement.lang = 'it';
+    }
+}
+
+function applyTranslations(lang) {
+    if (!translations || !translations[lang]) return;
+    const dict = translations[lang];
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+            el.textContent = dict[key];
+        }
+    });
+}
+
+// Menu mobile
 function initMobileMenu() {
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
     
-    if(mobileMenuButton && mobileMenu) {
+    if (mobileMenuButton && mobileMenu) {
         mobileMenuButton.addEventListener('click', function() {
             mobileMenu.classList.toggle('active');
         });
     }
 }
 
-// Initialize smooth scrolling for anchor links
+// Smooth scrolling
 function initSmoothScrolling() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
-            
             const targetId = this.getAttribute('href');
-            if(targetId === '#' || targetId === '') return;
+            if (targetId === '#' || targetId === '') return;
             
             const targetElement = document.querySelector(targetId);
-            if(targetElement) {
+            if (targetElement) {
                 window.scrollTo({
                     top: targetElement.offsetTop - 80,
                     behavior: 'smooth'
                 });
                 
-                // Close mobile menu if open
                 const mobileMenu = document.getElementById('mobile-menu');
-                if(mobileMenu) {
+                if (mobileMenu) {
                     mobileMenu.classList.remove('active');
                 }
             }
@@ -50,40 +116,38 @@ function initSmoothScrolling() {
     });
 }
 
-// Counter animation
+// Animazione contatori
 function animateCounter(element, target) {
     let count = 0;
-    const duration = 2000; // ms
-    const increment = target / (duration / 16); // assuming 60fps
+    const duration = 2000;
+    const increment = target / (duration / 16);
     
     const timer = setInterval(() => {
         count += increment;
-        if(count >= target) {
-            element.textContent = target > 1000 ? (target/1000).toFixed(1) + 'k' : target;
+        if (count >= target) {
+            element.textContent = target > 1000 ? (target / 1000).toFixed(1) + 'k' : target;
             clearInterval(timer);
         } else {
             element.textContent = Math.floor(count) > 1000 ? 
-                (Math.floor(count)/1000).toFixed(1) + 'k' : 
+                (Math.floor(count) / 1000).toFixed(1) + 'k' : 
                 Math.floor(count);
         }
     }, 16);
 }
 
-// Initialize counters when they come into view
 function initCounters() {
     const counterItems = document.querySelectorAll('.counter-item');
-    if(counterItems.length > 0) {
+    if (counterItems.length > 0) {
         counterItems.forEach(item => {
             const counter = item.querySelector('.counter');
-            if(!counter) return;
+            if (!counter) return;
             
             const target = parseInt(counter.getAttribute('data-target'));
-            if(isNaN(target)) return;
+            if (isNaN(target)) return;
             
-            // Simple animation trigger when element is in viewport
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if(entry.isIntersecting) {
+                    if (entry.isIntersecting) {
                         animateCounter(counter, target);
                         observer.unobserve(entry.target);
                     }
@@ -95,70 +159,77 @@ function initCounters() {
     }
 }
 
-// 1. Load News & Research Blog
+// 1. News
 async function loadNews() {
     try {
         const response = await fetch('data/news.json');
-        const newsItems = await response.json();
-        const container = document.getElementById('news-container');
-        if (!container) return;
-
-        container.innerHTML = '';
-
-        newsItems.forEach(item => {
-            const card = document.createElement('div');
-            card.className = "bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 hover:shadow-md transition";
-            
-            let colorClasses = "bg-blue-100 text-blue-900";
-            if (item.categoryColor === "emerald") colorClasses = "bg-emerald-100 text-emerald-900";
-            if (item.categoryColor === "purple") colorClasses = "bg-purple-100 text-purple-900";
-
-            let mediaHtml = '';
-            if (item.mediaType === 'image' && item.mediaUrl) {
-                mediaHtml = `<img src="${item.mediaUrl}" class="w-full h-48 object-cover rounded-lg border border-slate-100 mt-2" alt="${item.title}">`;
-            } else if (item.mediaType === 'video' && item.mediaUrl) {
-                mediaHtml = `
-                    <video controls class="w-full rounded-lg border border-slate-100 mt-2">
-                        <source src="${item.mediaUrl}">
-                        Your browser does not support video playback.
-                    </video>`;
-            } else if (item.mediaType === 'youtube' && item.mediaUrl) {
-                mediaHtml = `
-                    <div class="relative w-full aspect-video mt-2 rounded-lg overflow-hidden border border-slate-100">
-                        <iframe class="absolute top-0 left-0 w-full h-full" 
-                                src="${item.mediaUrl}" 
-                                title="${item.title}" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                        </iframe>
-                    </div>`;
-            }
-
-            card.innerHTML = `
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center text-xs">
-                        <span class="px-2 py-0.5 font-semibold rounded ${colorClasses}">${item.category}</span>
-                        <span class="text-slate-400">${item.date}</span>
-                    </div>
-                    <h3 class="font-bold text-slate-900">${item.title}</h3>
-                    <p class="text-sm text-slate-600">${item.description}</p>
-                    ${mediaHtml}
-                </div>
-            `;
-            container.appendChild(card);
-        });
+        allNews = await response.json();
+        renderNews();
     } catch (error) {
         console.error("Error loading news items:", error);
     }
 }
 
-// 2. Load Publications
+function renderNews() {
+    const container = document.getElementById('news-container');
+    if (!container || !allNews.length) return;
+
+    container.innerHTML = '';
+
+    allNews.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 hover:shadow-md transition";
+        
+        let colorClasses = "bg-blue-100 text-blue-900";
+        if (item.categoryColor === "emerald") colorClasses = "bg-emerald-100 text-emerald-900";
+        if (item.categoryColor === "purple") colorClasses = "bg-purple-100 text-purple-900";
+
+        const title = (currentLang === 'it' && item.title_it) ? item.title_it : item.title;
+        const description = (currentLang === 'it' && item.description_it) ? item.description_it : item.description;
+        const category = (currentLang === 'it' && item.category_it) ? item.category_it : item.category;
+
+        let mediaHtml = '';
+        if (item.mediaType === 'image' && item.mediaUrl) {
+            mediaHtml = `<img src="${item.mediaUrl}" class="w-full h-48 object-cover rounded-lg border border-slate-100 mt-2" alt="${title}">`;
+        } else if (item.mediaType === 'video' && item.mediaUrl) {
+            mediaHtml = `
+                <video controls class="w-full rounded-lg border border-slate-100 mt-2">
+                    <source src="${item.mediaUrl}">
+                    Your browser does not support video playback.
+                </video>`;
+        } else if (item.mediaType === 'youtube' && item.mediaUrl) {
+            mediaHtml = `
+                <div class="relative w-full aspect-video mt-2 rounded-lg overflow-hidden border border-slate-100">
+                    <iframe class="absolute top-0 left-0 w-full h-full" 
+                            src="${item.mediaUrl}" 
+                            title="${title}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>`;
+        }
+
+        card.innerHTML = `
+            <div class="space-y-2">
+                <div class="flex justify-between items-center text-xs">
+                    <span class="px-2 py-0.5 font-semibold rounded ${colorClasses}">${category}</span>
+                    <span class="text-slate-400">${item.date}</span>
+                </div>
+                <h3 class="font-bold text-slate-900">${title}</h3>
+                <p class="text-sm text-slate-600">${description}</p>
+                ${mediaHtml}
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// 2. Pubblicazioni
 async function loadPublications() {
     try {
         const response = await fetch('data/publications.json');
         allPublications = await response.json();
-        
         allPublications.sort((a, b) => b.year - a.year);
         renderPublications();
     } catch (error) {
@@ -168,7 +239,7 @@ async function loadPublications() {
 
 function renderPublications() {
     const listContainer = document.getElementById('publications-list');
-    if (!listContainer) return;
+    if (!listContainer || !allPublications.length) return;
 
     listContainer.innerHTML = '';
     const displayList = showingAll ? allPublications : allPublications.slice(0, 10);
@@ -190,14 +261,18 @@ function renderPublications() {
     });
 
     const toggleBtn = document.getElementById('toggle-pubs-btn');
-    const statsSpan = document.querySelector('#publications .bg-slate-200');
+    const statsSpan = document.getElementById('publication-count');
+    
     if (statsSpan) {
-        statsSpan.innerText = `${allPublications.length}+ Articles | h-index: 9`;
+        statsSpan.innerText = currentLang === 'it' 
+            ? `${allPublications.length}+ Articoli | h-index: 9` 
+            : `${allPublications.length}+ Articles | h-index: 9`;
     }
     if (toggleBtn) {
+        const dict = translations[currentLang];
         toggleBtn.innerText = showingAll 
-            ? 'Show Top 10 Publications' 
-            : `Show All Publications (${allPublications.length})`;
+            ? dict['pubs-btn-top'] 
+            : `${dict['pubs-btn-all']} (${allPublications.length})`;
     }
 }
 
@@ -206,7 +281,6 @@ function togglePublications() {
     renderPublications();
 }
 
-// Add event listener for toggle button after DOM content is loaded
 document.addEventListener('DOMContentLoaded', () => {
     const toggleBtn = document.getElementById('toggle-pubs-btn');
     if (toggleBtn) {
@@ -214,41 +288,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// 3. Load Posters
+// 3. Poster
 async function loadPosters() {
     try {
         const response = await fetch('data/posters.json');
-        const posters = await response.json();
-        
-        posters.sort((a, b) => b.year - a.year);
-
-        const container = document.getElementById('posters-container');
-        if (!container) return;
-
-        container.innerHTML = '';
-
-        posters.forEach(poster => {
-            const card = document.createElement('div');
-            card.className = "bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition";
-            card.innerHTML = `
-                <div class="p-6 space-y-2">
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded">${poster.conference}</span>
-                        <span class="text-xs font-medium text-slate-400">${poster.year}</span>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900">${poster.title}</h3>
-                    <p class="text-xs text-slate-500">${poster.authors}</p>
-                    <p class="text-sm text-slate-600 pt-1">${poster.description}</p>
-                </div>
-                <div class="p-4 bg-slate-50 border-t border-slate-100">
-                    <a href="${poster.pdfPath}" target="_blank" class="inline-flex items-center text-sm font-semibold text-blue-900 hover:text-blue-700">
-                        <i class="fas fa-file-pdf mr-2"></i> View / Download Poster PDF →
-                    </a>
-                </div>
-            `;
-            container.appendChild(card);
-        });
+        allPosters = await response.json();
+        allPosters.sort((a, b) => b.year - a.year);
+        renderPosters();
     } catch (error) {
         console.error("Error loading posters:", error);
     }
+}
+
+function renderPosters() {
+    const container = document.getElementById('posters-container');
+    if (!container || !allPosters.length) return;
+
+    container.innerHTML = '';
+    const dict = translations[currentLang];
+
+    allPosters.forEach(poster => {
+        const description = (currentLang === 'it' && poster.description_it) ? poster.description_it : poster.description;
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition";
+        card.innerHTML = `
+            <div class="p-6 space-y-2">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded">${poster.conference}</span>
+                    <span class="text-xs font-medium text-slate-400">${poster.year}</span>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">${poster.title}</h3>
+                <p class="text-xs text-slate-500">${poster.authors}</p>
+                <p class="text-sm text-slate-600 pt-1">${description}</p>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-100">
+                <a href="${poster.pdfPath}" target="_blank" class="inline-flex items-center text-sm font-semibold text-blue-900 hover:text-blue-700">
+                    <i class="fas fa-file-pdf mr-2"></i> ${dict['poster-download-btn']}
+                </a>
+            </div>
+        `;
+        container.appendChild(card);
+    });
 }
