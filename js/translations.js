@@ -74,7 +74,7 @@ const translations = {
     "nav-contact": "Contatti",
 
     // Hero
-    "hero-badge": "Ingegneria Alimentare & Scienze Sensoriali dei Consumatori",
+    "hero-badge": "Ingegneria Alimentare & Scienze Sensoriali sui Consumatori",
     "hero-title": "Unire Ingegneria Alimentare e Comprensione del Consumatore",
     "hero-subtitle": "Ricercatore Ph.D. & R&D Manager specializzato in analisi sensoriale di nuova generazione, ambienti immersivi in realtà virtuale, strumenti qualitativi AI/NLP, misure implicite e chemiometria.",
     "btn-download-cv": "Scarica CV",
